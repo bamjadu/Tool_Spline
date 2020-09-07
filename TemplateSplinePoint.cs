@@ -72,8 +72,6 @@ public class TemplateSplinePoint : MonoBehaviour
 
         if (isSelected == false)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var packagePath = PackagePath.FindForAssembly(assembly).assetPath;
             
             Gizmos.DrawIcon(this.transform.position, "Packages/com.unity.production.spline/Editor/Gizmos/IconControlPoint.png", true, Color.green);
             //Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.green);
