@@ -52,7 +52,12 @@ public class TemplateSplinePoint : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.red);
+        var assembly = Assembly.GetExecutingAssembly();
+        var packagePath = PackagePath.FindForAssembly(assembly).assetPath;
+
+        Gizmos.DrawIcon(this.transform.position, packagePath + "/Editor/Gizmos/IconControlPoint.png", true, Color.red);
+
+        //Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.red);
     }
 
     private void OnDrawGizmos()
@@ -69,7 +74,13 @@ public class TemplateSplinePoint : MonoBehaviour
         }
 
         if (isSelected == false)
-            Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.green);
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var packagePath = PackagePath.FindForAssembly(assembly).assetPath;
+            
+            Gizmos.DrawIcon(this.transform.position, packagePath + "/Editor/Gizmos/IconControlPoint.png", true, Color.green);
+            //Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.green);
+        }
     }
 
 
