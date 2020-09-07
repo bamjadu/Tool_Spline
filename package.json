@@ -1,6 +1,6 @@
 {
-  "name": "com.unity.tool-spline",
-  "displayName": "Live & Digital Production Tools | Spline",
+  "name": "com.unity.production.spline",
+  "displayName": "Live And Digital Spline Tool",
   "version": "0.1.0-preview.0",
   "unity": "2019.4",
   "description": "Containing Production tool sets related to Spline",
