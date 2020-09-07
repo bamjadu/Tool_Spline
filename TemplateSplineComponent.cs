@@ -76,13 +76,13 @@ public class TemplateSplineComponent : MonoBehaviour
     {
         int lastIndex = controlPoints.Count;
 
-        bool isNullFound = false;
+        //bool isNullFound = false;
 
         for (int i=0;i<lastIndex;i++)
         {
             if (controlPoints[i] == null)
             {
-                isNullFound = true;
+                //isNullFound = true;
                 controlPoints.RemoveAt(i);
                 i = i - 1;
                 lastIndex = controlPoints.Count;
@@ -97,6 +97,20 @@ public class TemplateSplineComponent : MonoBehaviour
         return lineRenderer;
     }
 
+
+    Material GetDefaultLineRenderMat()
+    {
+        Material defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/TemplateTools/SplineTool/Shader/SplineDefaultShader.mat");
+
+        if (defaultMat == null)
+        {
+            defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Packages/com.unity.production.spline/Shader/SplineDefaultShader.mat");
+        }
+
+        return defaultMat;
+    }
+
+
     private void Awake()
     {
         controllerMaterial = new Material(Shader.Find("HDRP/Lit"));
@@ -108,7 +122,9 @@ public class TemplateSplineComponent : MonoBehaviour
             if (gameObject.GetComponent<LineRenderer>() == null)
             {
                 lineRenderer = gameObject.AddComponent<LineRenderer>();
-                lineRenderer.material = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/TemplateTools/SplineTool/Shader/SplineDefaultShader.mat");
+
+                lineRenderer.material = GetDefaultLineRenderMat();
+
             }
             else
                 lineRenderer = gameObject.GetComponent<LineRenderer>();

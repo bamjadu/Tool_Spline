@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿
+#if UNITY_EDITOR
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
 
+using System.IO;
 
 [ExecuteInEditMode]
 public class TemplateSplinePoint : MonoBehaviour
@@ -19,7 +23,7 @@ public class TemplateSplinePoint : MonoBehaviour
 
     bool isIdeal = true;
 
-
+    
 
     private void Awake()
     {
@@ -48,13 +52,23 @@ public class TemplateSplinePoint : MonoBehaviour
         return this.transform.GetSiblingIndex();
     }
 
+    string GetGizmo()
+    {
+        string gizmoPath = "IconControlPoint";
 
+        string packagePath = "Packages/com.unity.production.spline";
+
+        if (Directory.Exists(Path.GetFullPath(packagePath)))
+        {
+            gizmoPath = "Packages/com.unity.production.spline/Editor/Gizmos/IconControlPoint.png";
+        }
+
+        return gizmoPath;
+    }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawIcon(this.transform.position,"Packages/com.unity.production.spline/Editor/Gizmos/IconControlPoint.png", true, Color.red);
-
-        //Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.red);
+        Gizmos.DrawIcon(this.transform.position, GetGizmo(), true, Color.red);
     }
 
     private void OnDrawGizmos()
@@ -72,9 +86,7 @@ public class TemplateSplinePoint : MonoBehaviour
 
         if (isSelected == false)
         {
-            
-            Gizmos.DrawIcon(this.transform.position, "Packages/com.unity.production.spline/Editor/Gizmos/IconControlPoint.png", true, Color.green);
-            //Gizmos.DrawIcon(this.transform.position, "IconControlPoint", true, Color.green);
+            Gizmos.DrawIcon(this.transform.position, GetGizmo(), true, Color.green);
         }
     }
 
@@ -114,8 +126,7 @@ public class TemplateSplinePoint : MonoBehaviour
 
     }
 
-   
-
-    
 
 }
+
+#endif

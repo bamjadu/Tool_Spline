@@ -61,6 +61,9 @@ public class TemplateSplineComponentTool : EditorTool
                 tooltip = "Spline Tool"
             };
 
+            if (SceneView.lastActiveSceneView.drawGizmos == false)
+                SceneView.lastActiveSceneView.drawGizmos = true;
+
             //targetTool = GameObject.Find(ToolName);
 
             bool foundExistingSpline = false;

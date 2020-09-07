@@ -10,6 +10,8 @@ using UnityEditor;
 using UnityEngine.Animations;
 using UnityEditor.Animations;
 
+using System.IO;
+
 [ExecuteInEditMode]
 public class TemplateSplineBendingController : MonoBehaviour
 {
@@ -88,6 +90,23 @@ public class TemplateSplineBendingController : MonoBehaviour
 
     }
 
+
+    string GetGizmo()
+    {
+        string gizmoPath = "IconBend";
+
+        string packagePath = "Packages/com.unity.production.spline";
+
+        if (Directory.Exists(Path.GetFullPath(packagePath)))
+        {
+            gizmoPath = "Packages/com.unity.production.spline/Editor/Gizmos/IconBend.png";
+        }
+
+        return gizmoPath;
+    }
+
+
+
     private void OnDrawGizmos()
     {
         bool isSelected = false;
@@ -102,12 +121,12 @@ public class TemplateSplineBendingController : MonoBehaviour
         }
 
         if (isSelected == false)
-            Gizmos.DrawIcon(this.transform.position, "IconBend", true);
+            Gizmos.DrawIcon(this.transform.position, GetGizmo(), true);
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawIcon(this.transform.position, "IconBend", true, Color.yellow);
+        Gizmos.DrawIcon(this.transform.position, GetGizmo(), true, Color.yellow);
     }
 
     
