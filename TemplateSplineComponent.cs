@@ -147,7 +147,18 @@ public class TemplateSplineComponent : MonoBehaviour
 
     RenderPipeline GetCurrentRenderPipeline()
     {
-        
+        try
+        {
+            if (GraphicsSettings.renderPipelineAsset == null)
+            {
+                return RenderPipeline.STANDARD;
+            }
+        }
+        catch
+        {
+            return RenderPipeline.STANDARD;
+        }
+
         if (GraphicsSettings.renderPipelineAsset.name.Contains("UniversalRP"))
         {
             return RenderPipeline.URP;
