@@ -10,7 +10,8 @@ using UnityEditor;
 using UnityEngine.Animations;
 using UnityEditor.Animations;
 
-
+using UnityEngine.Rendering;
+using UnityEditor.Rendering;
 
 [ExecuteInEditMode]
 public class TemplateSplineComponent : MonoBehaviour
@@ -59,6 +60,17 @@ public class TemplateSplineComponent : MonoBehaviour
         BSpline,
     }
 
+    public enum RenderPipeline
+    {
+        HDRP,
+        URP,
+        STANDARD
+    }
+
+    [HideInInspector]
+    private RenderPipeline currentRenderPipeline;
+
+
     [HideInInspector]
     public CurveType curveType = CurveType.Bezier;
 
@@ -74,6 +86,7 @@ public class TemplateSplineComponent : MonoBehaviour
 
     public void CheckControlPoints()
     {
+        
         int lastIndex = controlPoints.Count;
 
         //bool isNullFound = false;
@@ -100,22 +113,76 @@ public class TemplateSplineComponent : MonoBehaviour
 
     Material GetDefaultLineRenderMat()
     {
-        Material defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/TemplateTools/SplineTool/Shader/SplineDefaultShader.mat");
+
+        string targetMaterialName = "SplineDefaultShader.mat";
+
+        /*
+        switch(currentRenderPipeline)
+        {
+            case RenderPipeline.HDRP:
+                targetMaterialName = "SplineDefaultShader.mat";
+                break;
+
+            case RenderPipeline.URP:
+                targetMaterialName = "SplineDefaultShader_URP.mat";
+                break;
+
+            case RenderPipeline.STANDARD:
+                targetMaterialName = "SplineDefaultShader_STANDARD.mat";
+                break;
+        }
+        */
+
+        //Material defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Scripts/TemplateTools/SplineTool/Shader/SplineDefaultShader.mat");
+        Material defaultMat = AssetDatabase.LoadAssetAtPath<Material>(string.Format("Assets/Scripts/TemplateTools/SplineTool/Shader/{0}", targetMaterialName));
 
         if (defaultMat == null)
         {
-            defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Packages/com.unity.production.spline/Shader/SplineDefaultShader.mat");
+            //defaultMat = AssetDatabase.LoadAssetAtPath<Material>("Packages/com.unity.production.spline/Shader/SplineDefaultShader.mat");
+            defaultMat = AssetDatabase.LoadAssetAtPath<Material>(string.Format("Packages/com.unity.production.spline/Shader/{0}", targetMaterialName));
         }
 
         return defaultMat;
     }
 
+    RenderPipeline GetCurrentRenderPipeline()
+    {
+        
+        if (GraphicsSettings.renderPipelineAsset.name.Contains("UniversalRP"))
+        {
+            return RenderPipeline.URP;
+        }
+        else if (GraphicsSettings.renderPipelineAsset.name.Contains("HDRenderPipeline"))
+        {
+            return RenderPipeline.HDRP;
+        }
+
+        return RenderPipeline.STANDARD;
+    }
+
+
 
     private void Awake()
     {
-        controllerMaterial = new Material(Shader.Find("HDRP/Lit"));
+        currentRenderPipeline = GetCurrentRenderPipeline();
 
-        
+
+        switch(currentRenderPipeline)
+        {
+            case RenderPipeline.HDRP:
+                controllerMaterial = new Material(Shader.Find("HDRP/Lit"));
+                break;
+
+            case RenderPipeline.URP:
+                controllerMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                break;
+
+            case RenderPipeline.STANDARD:
+                controllerMaterial = new Material(Shader.Find("Standard"));
+                break;
+        }
+
+        //controllerMaterial = new Material(Shader.Find("HDRP/Lit"));
 
         //if (lineRenderer == null)
         //{
@@ -682,9 +749,26 @@ public class TemplateSplineComponent : MonoBehaviour
         mRender.updateWhenOffscreen = true;
         mRender.sharedMesh = mesh;
 
-        mRender.sharedMaterial = new Material(Shader.Find("HDRP/Lit"));
 
-        
+        switch (currentRenderPipeline)
+        {
+            case RenderPipeline.HDRP:
+                mRender.sharedMaterial = new Material(Shader.Find("HDRP/Lit"));
+                break;
+
+            case RenderPipeline.URP:
+                mRender.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                break;
+
+            case RenderPipeline.STANDARD:
+                mRender.sharedMaterial = new Material(Shader.Find("Standard"));
+                break;
+        }
+
+        //mRender.sharedMaterial = new Material(Shader.Find("HDRP/Lit"));
+        //mRender.sharedMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+
+
 
         //mRender.rootBone = GeneratedRig.transform;
         mRender.bones = bones;
