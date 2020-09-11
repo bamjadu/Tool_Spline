@@ -161,9 +161,9 @@ public class TemplateSplineComponentTool : EditorTool
 
 
         if (Event.current.type == EventType.Layout)
-            HandleUtility.AddDefaultControl(3);
+            HandleUtility.AddDefaultControl(1);
 
-
+        
         RaycastHit cHit;
 
         Ray cRay = SceneView.lastActiveSceneView.camera.ScreenPointToRay(HandleUtility.GUIPointToScreenPixelCoordinate(Event.current.mousePosition));
