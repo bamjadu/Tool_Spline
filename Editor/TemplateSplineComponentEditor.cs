@@ -47,7 +47,8 @@ public class TemplateSplineComponentEditor : Editor
                     //splineComp.GetCurrentLineRenderer().material.SetColor("_UnlitColor", splineComp.color);
 
                     MaterialPropertyBlock mBlock = new MaterialPropertyBlock();
-                    mBlock.SetColor("_UnlitColor", splineComp.color);
+                    //mBlock.SetColor("_UnlitColor", splineComp.color);
+                    mBlock.SetColor("_Color", splineComp.color);
                     splineComp.GetCurrentLineRenderer().SetPropertyBlock(mBlock);
                 }
             }
